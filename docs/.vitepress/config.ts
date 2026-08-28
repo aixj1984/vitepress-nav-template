@@ -11,8 +11,8 @@ export default defineConfig({
   base: APP_BASE_PATH ? `/${APP_BASE_PATH}/` : '/',
 
   lang: 'zh-CN',
-  title: '茂茂物语',
-  description: '茂茂的成长之路，包含前端常用知识、源码阅读笔记、各种奇淫技巧、日常提效工具等',
+  title: '前端导航',
+  description: '基于 VitePress 的个人前端导航',
   head,
 
   lastUpdated: true,
@@ -28,6 +28,7 @@ export default defineConfig({
     i18nRouting: false,
 
     logo: '/logo.png',
+    logoLink: '/',
 
     nav,
     sidebar,
@@ -39,11 +40,6 @@ export default defineConfig({
     },
 
     socialLinks: [{ icon: 'github', link: 'https://github.com/maomao1996/vitepress-nav-template' }],
-
-    footer: {
-      message: '如有转载或 CV 的请标注本站原文地址',
-      copyright: 'Copyright © 2019-present maomao',
-    },
 
     lastUpdated: {
       text: '最后更新于',
@@ -68,16 +64,16 @@ export default defineConfig({
     visitor: {
       badgeId: 'maomao1996.vitepress-nav-template',
     },
-
-    comment: {
-      repo: 'maomao1996/vitepress-nav-template',
-      repoId: 'R_kgDOJC09Jg',
-      category: 'Announcements',
-      categoryId: 'DIC_kwDOJC09Js4Cekn0',
-    },
   },
 
   vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern',
+        },
+      },
+    },
     plugins: [MarkdownPreview()],
   },
 })

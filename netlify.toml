@@ -4,3 +4,13 @@
 [build]
   publish = "dist"
   command = "pnpm build"
+
+[[redirects]]
+  from = "/nav"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/nav/"
+  to = "/"
+  status = 301

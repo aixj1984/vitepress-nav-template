@@ -2,18 +2,13 @@
 import { useData, inBrowser } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import { nextTick, provide } from 'vue'
-import Giscus from '@giscus/vue'
-
-import { usePageId } from '../composables'
 
 import MNavVisitor from './MNavVisitor.vue'
-import MDocFooter from './MDocFooter.vue'
+import SiteFooter from './SiteFooter.vue'
+import NavSearch from './NavSearch.vue'
 
 const { Layout } = DefaultTheme
-const { isDark, theme, frontmatter } = useData()
-const pageId = usePageId()
-
-const { comment } = theme.value
+const { isDark } = useData()
 
 const enableTransitions = () =>
   'startViewTransition' in document &&
@@ -30,33 +25,38 @@ function updateMetaThemeColor() {
 updateMetaThemeColor()
 
 provide('toggle-appearance', async ({ clientX: x, clientY: y }: MouseEvent) => {
-  if (!enableTransitions()) {
-    isDark.value = !isDark.value
-    updateMetaThemeColor()
-    return
-  }
-
-  const clipPath = [
-    `circle(0px at ${x}px ${y}px)`,
-    `circle(${Math.hypot(
-      Math.max(x, innerWidth - x),
-      Math.max(y, innerHeight - y),
-    )}px at ${x}px ${y}px)`,
-  ]
-
-  // @ts-ignore
-  await document.startViewTransition(async () => {
+  const applyTheme = async () => {
     isDark.value = !isDark.value
     updateMetaThemeColor()
     await nextTick()
-  }).ready
+  }
 
+  // 无 View Transitions 时用全局颜色过渡，避免生硬闪切
+  if (!enableTransitions()) {
+    const root = document.documentElement
+    root.classList.add('theme-transition')
+    await applyTheme()
+    window.setTimeout(() => root.classList.remove('theme-transition'), 420)
+    return
+  }
+
+  const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))
+  const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`]
+
+  // @ts-ignore
+  const transition = document.startViewTransition(applyTheme)
+  await transition.ready
+
+  const goingDark = isDark.value
   document.documentElement.animate(
-    { clipPath: isDark.value ? clipPath.reverse() : clipPath },
     {
-      duration: 300,
-      easing: 'ease-in',
-      pseudoElement: `::view-transition-${isDark.value ? 'old' : 'new'}(root)`,
+      clipPath: goingDark ? [...clipPath].reverse() : clipPath,
+    },
+    {
+      duration: 560,
+      easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+      fill: 'forwards',
+      pseudoElement: `::view-transition-${goingDark ? 'old' : 'new'}(root)`,
     },
   )
 })
@@ -73,26 +73,9 @@ provide('toggle-appearance', async ({ clientX: x, clientY: y }: MouseEvent) => {
       <MNavVisitor />
     </template>
 
-    <template v-if="comment && frontmatter.comment !== false" #doc-footer-before>
-      <div class="doc-comments">
-        <Giscus
-          id="comments"
-          mapping="specific"
-          :term="pageId"
-          strict="1"
-          reactionsEnabled="1"
-          emitMetadata="0"
-          inputPosition="top"
-          :theme="isDark ? 'dark' : 'light'"
-          lang="zh-CN"
-          loading="lazy"
-          v-bind="{ ...comment }"
-        />
-      </div>
-    </template>
-
-    <template #doc-after>
-      <MDocFooter />
+    <template #layout-bottom>
+      <SiteFooter />
+      <NavSearch />
     </template>
   </Layout>
 </template>
@@ -100,12 +83,5 @@ provide('toggle-appearance', async ({ clientX: x, clientY: y }: MouseEvent) => {
 <style>
 .prev-next.prev-next {
   border-top: none;
-}
-
-.doc-comments {
-  margin-top: 24px;
-  margin-bottom: 48px;
-  border-top: 1px solid var(--vp-c-divider);
-  padding-top: 24px;
 }
 </style>

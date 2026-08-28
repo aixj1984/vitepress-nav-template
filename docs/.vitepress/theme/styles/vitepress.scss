@@ -92,3 +92,17 @@ table {
 .dark::view-transition-old(root) {
   z-index: 9999;
 }
+
+/* 让圆形扩散的边缘更顺滑，减少硬切感 */
+::view-transition-group(root) {
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 不支持 View Transitions 时的兜底过渡 */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition: background-color 0.4s ease, color 0.35s ease, border-color 0.35s ease,
+    box-shadow 0.35s ease, fill 0.35s ease, stroke 0.35s ease !important;
+}
