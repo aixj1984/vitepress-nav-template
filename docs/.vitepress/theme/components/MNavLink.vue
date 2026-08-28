@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { withBase } from 'vitepress'
+import { withBase } from 'vitepress/client'
 import { slugify } from '@mdit-vue/shared'
 
 import { NavLink } from '../types'

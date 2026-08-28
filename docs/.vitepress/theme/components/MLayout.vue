@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useData, inBrowser } from 'vitepress'
+import { useData, inBrowser } from 'vitepress/client'
 import DefaultTheme from 'vitepress/theme'
 import { nextTick, provide } from 'vue'
 

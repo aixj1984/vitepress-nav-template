@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import { withBase } from 'vitepress'
+import { withBase } from 'vitepress/client'
 import { NAV_DATA } from '../../../nav/data'
 import type { NavLink } from '../types'
 

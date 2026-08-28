@@ -1,4 +1,4 @@
-/// <reference types="vitepress/client" />
+export {}
 
 declare module 'vitepress' {
   export namespace DefaultTheme {

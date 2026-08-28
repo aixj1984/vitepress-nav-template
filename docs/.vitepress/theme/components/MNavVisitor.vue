@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useData } from 'vitepress'
+import { useData } from 'vitepress/client'
 import { inject, Ref } from 'vue'
 
 const DEV = inject<Ref<boolean>>('DEV')

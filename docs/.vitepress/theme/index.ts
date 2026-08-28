@@ -1,5 +1,5 @@
 import { h, watch } from 'vue'
-import { useData, EnhanceAppContext } from 'vitepress'
+import { useData, type EnhanceAppContext } from 'vitepress/client'
 import DefaultTheme from 'vitepress/theme'
 
 import MLayout from './components/MLayout.vue'
