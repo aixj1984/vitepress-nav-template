@@ -1,114 +1,89 @@
 # vitepress-nav-template
 
+<p align="center">基于 <b>VitePress</b> 的个人前端导航站点</p>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/maomao1996/picture/main/vitepress-nav-template/home.webp" alt="home" />
+  <a href="/guide.md">使用指引</a> ·
+  <a href="https://aixj1984.github.io/vitepress-nav-template/">在线预览</a> ·
+  <a href="https://github.com/aixj1984/vitepress-nav-template">GitHub</a>
 </p>
-<p align="center"> 基于 <b>VitePress</b> 的个人前端导航页面模板 </p>
-<p align='center'><a href="/guide.md">基础教程</a> | <a href="https://notes.fe-mm.com/">作者博客</a></p>
 
 ---
 
-## 预览地址
+## 一级访问地址
 
-- <https://fe-nav.netlify.app/nav/>
-- <https://maomao1996.github.io/vitepress-nav-template/nav/>
+站点入口为根路径 `/`（不再使用 `/nav/`）：
+
+| 环境         | 地址                                                 |
+| ------------ | ---------------------------------------------------- |
+| 本地开发     | <http://localhost:8732/>                             |
+| GitHub Pages | <https://aixj1984.github.io/vitepress-nav-template/> |
+
+> 旧地址 `/nav/` 会 301 重定向到 `/`。
 
 ## 功能
 
-- 新增 `layout-class` 方便更好的自定义样式
-- 默认中文
-- 自带前端导航模块
-- 支持访客统计
-- 支持 [giscus 评论](https://giscus.app/zh-CN)
-- 支持日夜颜色模式自适应切换
-- 支持 Github Pages 直接部署上线
-  - 1. 开启 github actions
-  - 2. 配置 Pages 的 Branch 为 `gh-pages` 分支，文件夹为 `/(root)`
-  - 3. 访问地址为 `https://<username>.github.io/<repository>/` 或自定义域名
-- 支持 [tailwindcss](https://github.com/tailwindlabs/tailwindcss)
-- 支持查看 vue 示例组件源码（使用 [vite-plugin-markdown-preview](https://github.com/jaskang/vite-plugin-markdown-preview)）
+- 导航页直接作为首页
+- 顶部居中模糊搜索（支持名称 / URL，`Ctrl/⌘ K`）
+- 深浅色主题切换（平滑过渡）
+- 自定义页脚链接区
+- 访客统计（可选）
+- GitHub Pages / Netlify / Vercel 部署
 
 ## 本地启动
 
-1. 下载并安装 [Node.js](https://nodejs.org/zh-cn/download) 推荐 20 版本及更高版本
-2. 开启 `corepack enable`
-3. 安装依赖 `pnpm install`
-4. 启动本地服务 `pnpm dev`
-5. 访问 `http://localhost:8732` 查看效果
+1. 安装 [Node.js](https://nodejs.org/zh-cn/download)（推荐 20+）
+2. `corepack enable`
+3. `pnpm install`
+4. `pnpm dev`
+5. 打开 <http://localhost:8732/>
 
-#### 使用自定义域名部署
+## 常用修改
 
-当 Github Pages 使用自定义域名时，需要修改 `.github/workflows/deploy.yml` 脚本中的 `APP_BASE_PATH` 为 `/`
+| 内容                | 文件                                              |
+| ------------------- | ------------------------------------------------- |
+| 导航数据            | `docs/nav/data.ts`                                |
+| 首页内容            | `docs/index.md`                                   |
+| 顶部菜单            | `docs/.vitepress/configs/nav.ts`                  |
+| 站点标题 / 社交链接 | `docs/.vitepress/config.ts`                       |
+| 页脚                | `docs/.vitepress/theme/components/SiteFooter.vue` |
 
-更**推荐使用第三方服务绑定域名来部署**
+更细的说明见 [guide.md](./guide.md)。
 
-- [Netlify](https://www.netlify.com/)
-- [Vercel](https://vercel.com/)
-- [Cloudflare Pages](https://pages.cloudflare.com/)
+## 部署
 
-使用仪表板创建新项目并更改这些设置：
+### GitHub Pages（推荐本仓库默认方式）
 
-- **构建命令：** `npm run build`
-- **输出目录：** `dist`
-- **node 版本：** `20` (或更高版本)
+1. 仓库 **Settings → Pages**
+2. Source 选择 **Deploy from a branch**
+3. Branch 选 `gh-pages`，目录 `/(root)`
+4. 推送 `main` 后，Actions 会自动构建并发布
+5. 访问：`https://aixj1984.github.io/vitepress-nav-template/`
 
-更多部署指南请查看 [VitePress 各平台部署指南](https://vitepress.dev/zh/guide/deploy#platform-guides)
+如使用**自定义域名**，把 `.github/workflows/deploy.yml` 里的 `APP_BASE_PATH` 改成 `/`。
 
-### 开启访客统计
+### Netlify / Vercel / Cloudflare Pages
 
-需在 `docs/.vitepress/config.ts` 中配置 `themeConfig.visitor`
+| 项                | 值           |
+| ----------------- | ------------ |
+| Build command     | `pnpm build` |
+| Publish directory | `dist`       |
+| Node              | `20+`        |
 
-```ts
-export default defineConfig({
-  themeConfig: {
-    /* 访客统计 */
-    visitor: {
-      /** 统计 id（单独页面的统计会作为前缀使用）*/
-      badgeId: 'maomao1996.vitepress-nav-template',
-    },
-  },
-})
-```
+## 访客统计（可选）
 
-### 开启 giscus 评论
-
-需在 `docs/.vitepress/config.ts` 中配置 `themeConfig.comment`
+在 `docs/.vitepress/config.ts` 中配置：
 
 ```ts
-export default defineConfig({
-  themeConfig: {
-    /**
-     * giscus 评论配置
-     *  请根据 https://giscus.app/zh-CN 生成内容填写
-     */
-    comment: {
-      /** github 仓库地址 */
-      repo: '',
-      /** giscus 仓库 ID */
-      repoId: '',
-      /** Discussion 分类 */
-      category: '',
-      /** giscus 分类 ID */
-      categoryId: '',
-    },
+themeConfig: {
+  visitor: {
+    badgeId: 'aixj1984.vitepress-nav-template',
   },
-})
+}
 ```
-
-#### 在指定页面关闭评论
-
-需在指定页面的 `markdown` 文件中添加如下 `frontmatter` 配置
-
-```md
----
-comment: false
----
-
-# 功能测试页
-```
-
-docs: 更新 README
 
 ## 说明
 
-前端导航模块由 [茂茂 | maomao](https://github.com/maomao1996) 开发，如有引用、借鉴的请保留版权声明：<https://github.com/maomao1996/vitepress-nav-template>
+基于 [maomao1996/vitepress-nav-template](https://github.com/maomao1996/vitepress-nav-template) 改造。  
+如有引用、借鉴请保留原作者版权声明。
+
+本仓库：<https://github.com/aixj1984/vitepress-nav-template>

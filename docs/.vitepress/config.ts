@@ -1,14 +1,23 @@
 import { basename } from 'node:path'
 import { defineConfig } from 'vitepress'
-import MarkdownPreview from 'vite-plugin-markdown-preview'
 
-import { head, nav, sidebar } from './configs'
+import { head, nav } from './configs'
 
-const APP_BASE_PATH = basename(process.env.GITHUB_REPOSITORY || '')
+/** GitHub Pages 项目页用 /仓库名/ ；自定义域名或本地开发用 / */
+function resolveBase() {
+  const fromEnv = process.env.APP_BASE_PATH
+  if (fromEnv) {
+    if (fromEnv === '/') return '/'
+    return fromEnv.endsWith('/') ? fromEnv : `${fromEnv}/`
+  }
+
+  const repo = process.env.GITHUB_REPOSITORY
+  return repo ? `/${basename(repo)}/` : '/'
+}
 
 export default defineConfig({
   outDir: '../dist',
-  base: APP_BASE_PATH ? `/${APP_BASE_PATH}/` : '/',
+  base: resolveBase(),
 
   lang: 'zh-CN',
   title: '前端导航',
@@ -18,12 +27,10 @@ export default defineConfig({
   lastUpdated: true,
   cleanUrls: true,
 
-  /* markdown 配置 */
   markdown: {
     lineNumbers: true,
   },
 
-  /* 主题配置 */
   themeConfig: {
     i18nRouting: false,
 
@@ -31,15 +38,14 @@ export default defineConfig({
     logoLink: '/',
 
     nav,
-    sidebar,
+    sidebar: {},
 
-    /* 右侧大纲配置 */
     outline: {
       level: 'deep',
       label: '目录',
     },
 
-    socialLinks: [{ icon: 'github', link: 'https://github.com/maomao1996/vitepress-nav-template' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/aixj1984/vitepress-nav-template' }],
 
     lastUpdated: {
       text: '最后更新于',
@@ -60,9 +66,8 @@ export default defineConfig({
     lightModeSwitchTitle: '切换到浅色模式',
     darkModeSwitchTitle: '切换到深色模式',
 
-    /*** 自定义配置 ***/
     visitor: {
-      badgeId: 'maomao1996.vitepress-nav-template',
+      badgeId: 'aixj1984.vitepress-nav-template',
     },
   },
 
@@ -74,6 +79,5 @@ export default defineConfig({
         },
       },
     },
-    plugins: [MarkdownPreview()],
   },
 })

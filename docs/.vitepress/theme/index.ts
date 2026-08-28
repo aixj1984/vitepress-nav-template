@@ -2,8 +2,6 @@ import { h, watch } from 'vue'
 import { useData, EnhanceAppContext } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 
-import { createMediumZoomProvider } from './composables/useMediumZoom'
-
 import MLayout from './components/MLayout.vue'
 import MNavLinks from './components/MNavLinks.vue'
 
@@ -15,10 +13,8 @@ export default {
   extends: DefaultTheme,
   Layout: () => {
     const props: Record<string, any> = {}
-    // 获取 frontmatter
     const { frontmatter } = useData()
 
-    /* 添加自定义 class */
     if (frontmatter.value?.layoutClass) {
       props.class = frontmatter.value.layoutClass
     }
@@ -26,10 +22,7 @@ export default {
     return h(MLayout, props)
   },
   enhanceApp({ app, router }: EnhanceAppContext) {
-    createMediumZoomProvider(app, router)
-
     app.provide('DEV', process.env.NODE_ENV === 'development')
-
     app.component('MNavLinks', MNavLinks)
 
     if (typeof window !== 'undefined') {
@@ -37,8 +30,9 @@ export default {
         () => router.route.data.relativePath,
         () =>
           updateHomePageStyle(
-            /* 导航页作为首页；兼容 GitHub Pages base */
-            location.pathname === '/' || location.pathname === '/vitepress-nav-template/',
+            location.pathname === '/' ||
+              location.pathname === '/vitepress-nav-template/' ||
+              location.pathname.endsWith('/vitepress-nav-template'),
           ),
         { immediate: true },
       )
@@ -47,7 +41,6 @@ export default {
 }
 
 if (typeof window !== 'undefined') {
-  // detect browser, add to class for conditional styling
   const browser = navigator.userAgent.toLowerCase()
   if (browser.includes('chrome')) {
     document.documentElement.classList.add('browser-chrome')
@@ -58,7 +51,6 @@ if (typeof window !== 'undefined') {
   }
 }
 
-// Speed up the rainbow animation on home page
 function updateHomePageStyle(value: boolean) {
   if (value) {
     if (homePageStyle) return

@@ -1,194 +1,93 @@
-# 自定义基础指引
+# 使用指引
 
-面向对 Vitepress 了解不多、仅想套用模板做站点的定制化指引。  
-（注：本文内容目标：达成基本的样式套用，深入修改请参照 Vue 文档等）  
-（请在贵站中标注本项目仓库地址等信息）
+面向本仓库（导航首页版）的定制说明。
 
-## 一、首页配置
+## 一、一级入口
 
-这里指前端导航页访问的初始页面。
+站点主页面就是首页：
 
-![首页](https://raw.githubusercontent.com/maomao1996/picture/main/vitepress-nav-template/home.webp)
+- 本地：`http://localhost:8732/`
+- 线上：`https://aixj1984.github.io/vitepress-nav-template/`
 
-### 1.主体部分
+`/nav/` 仅作兼容跳转，请统一使用根路径。
 
-修改位置：/docs/index.md
+## 二、首页与导航数据
 
-范例：
+### 1. 首页
 
-```ts
-hero:
-  name: 茂茂的 //左侧第一行
-  text: 个人前端导航  //左侧第二行
-  tagline: 使用 VitePress 打造个人前端导航  //第三行小注内容
-  image:
-    src: /logo.png //页面大图地址（图像最好切圆后使用）
-    alt: 茂茂物语
-  actions:  //跳转按钮，可按需增减
-    - text: 茂茂物语
-      link: https://notes.fe-mm.com
-    - text: 前端导航
-      link: /nav/
-      theme: alt  //此行代表跳转至新标签页显示
-    - text: mmPlayer
-      link: https://netease-music.fe-mm.com
-      theme: alt
-features:
-  - icon: 📖  //图标（输入法的表情icon即可）
-    title: 前端物语  //小标题
-    details: 整理前端常用知识点<br />如有异议按你的理解为主，不接受反驳  //注释
+文件：`docs/index.md`
+
+当前为导航布局，一般只需改标题文案：
+
+```md
+# 前端导航
 ```
 
-### 2.导航栏与页脚
+### 2. 站点列表数据
 
-**2.1 导航栏**：
+文件：`docs/nav/data.ts`
 
-修改位置：/docs/.vitepress/configs/nav.ts
-
-范例（按需增减）：
+| 字段    | 说明                  |
+| ------- | --------------------- |
+| `icon`  | 图标（绝对/相对路径） |
+| `title` | 站点名称              |
+| `desc`  | 描述（可选）          |
+| `link`  | 跳转链接（必填）      |
 
 ```ts
-export const nav: DefaultTheme.Config['nav'] = [
-  { text: '个人主页', link: 'https://fe-mm.com' }, //切行无影响
+export const NAV_DATA = [
   {
-    text: '茂茂物语', //显示文本
-    link: 'https://notes.fe-mm.com', //链接
-  },
-]
-```
-
-**2.2 社交链接&页脚**：
-
-修改位置：/docs/nav/index.md
-
-```ts
-export default defineConfig({
-    ---
-    socialLinks: [{ icon: 'github', link: 'https://github.com/maomao1996/vitepress-nav-template' }], //社交链接
-
-    footer: {
-      message: '如有转载或 CV 的请标注本站原文地址',
-      copyright: 'Copyright © 2019-present maomao'
-    },  //页脚，可按Vue支持格式修改
-})
-```
-
-## 二、站点列表页
-
-一般对应 `https://域名(ip)/nav/`
-
-![站点列表页](https://raw.githubusercontent.com/maomao1996/picture/main/vitepress-nav-template/nav.webp)
-
-### 1.站点列表数据
-
-修改文件: /docs/nav/data.js
-
-此处的站点信息涉及四个属性：  
-|属性值|作用|
-|:--|--|
-|icon|图标地址（可填绝对/相对路径）|
-|title|站点标题|
-|desc|站点描述|
-|link|链接地址（必填）|
-
-除 link 外，其余属性可按需填入。
-
-基本结构如下:
-
-```ts
-export const NAV_ATA: NavData[] = [
-  {
-    title: '类别1' //分类标题
+    title: '常用工具',
     items: [
       {
-        icon: '',
-        title: '',
-        desc: '',
-        link: ''
-      }
-    ]
-  },
-  {
-    title: ''  //分类标题
-    items: [
-      {
-        icon: '',
-        title: '',
-        desc: '',
-        link: ''
+        icon: 'https://example.com/favicon.ico',
+        title: '示例站点',
+        desc: '一句话介绍',
+        link: 'https://example.com',
       },
-      {
-        icon: '',
-        title: '',
-        desc: '',
-        link: ''
-      }
-    ]
-  }
+    ],
+  },
 ]
 ```
 
-### 2.页面自定义
+## 三、顶部导航与站点配置
 
-**2.1 添加其他元素**：
+### 1. 顶部菜单
 
-修改位置：/docs/nav/index.md
-
-Nav 页本身属于 MD 文件渲染，因此除引用的 data 文件用于数据列表显示，还可以添加其他内容。
-
-例如以下范例：
+文件：`docs/.vitepress/configs/nav.ts`
 
 ```ts
-# 前端导航  //标题
-
-<MNavLinks v-for="{title, items} in NAV_DATA" :title="title" :items="items"/>  //引用data.ts文件显示站点列表
-
-<br />
-
-::: tip
-该导航由 [maomao](https://github.com/maomao1996) 开发，如有引用、借鉴的请保留版权声明：<https://github.com/maomao1996/vitepress-nav-template>
-:::  //引用Notes提示块
+export const nav = [{ text: '前端导航', link: '/' }]
 ```
 
-**2.2 其他部分**：
+### 2. 站点信息
 
-修改位置：/docs/.vitepress/config.ts
+文件：`docs/.vitepress/config.ts`
 
-## 三、站点属性配置
+可改：
 
-**3.1 站点图标（favicon）**：
+- `title` / `description`
+- `socialLinks`（GitHub 图标链接）
+- `themeConfig.visitor.badgeId`
 
-修改位置：/docs/.vitepress/configs/head.ts  
-在对应位置更改即可。
+### 3. 页脚
 
-**3.2 站点标题与图标**：
+文件：`docs/.vitepress/theme/components/SiteFooter.vue`
 
-修改位置：/docs/.vitepress/config.ts
+包含底部工具链接与版权信息。
 
-站点标题：
+### 4. 搜索
 
-```ts
-export default defineConfig({
-  ---
-  lang: 'zh-CN',  //语言，建议中文（zh-CN）
-  title: '',  //站点标题
-  description: '',  //简介
-  head,
-})
-```
+文件：`docs/.vitepress/theme/components/NavSearch.vue`
 
-站点图标：
+顶部居中搜索框，支持名称 / URL 模糊匹配；快捷键 `Ctrl/⌘ K`。
 
-```ts
-export default defineConfig({
-  ---
-  /* 主题配置 */
-  themeConfig: {
-    i18nRouting: false,
+## 四、部署注意
 
-    logo: '/logo.png',  //更改此处
-```
+GitHub Pages 项目页默认 `base` 为 `/vitepress-nav-template/`。  
+自定义域名时，将 workflow 中 `APP_BASE_PATH` 设为 `/`。
 
----
+## 五、版权
 
-（本文档作者：[@轻虹空雨](https://github.com/MuFeng086)）
+模板源自 [maomao1996/vitepress-nav-template](https://github.com/maomao1996/vitepress-nav-template)。  
+引用或二次开发请保留原作者声明。
