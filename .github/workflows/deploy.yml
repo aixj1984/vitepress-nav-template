@@ -1,17 +1,11 @@
 name: Deploy GitHub Pages
 
+# 推送到 main 或手动触发都会部署
 on:
   workflow_dispatch:
   push:
     branches:
       - main
-    paths:
-      - 'docs/**'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - '.github/workflows/deploy.yml'
-      - 'netlify.toml'
-      - 'postcss.config.js'
 
 permissions:
   contents: write
