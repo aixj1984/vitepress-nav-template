@@ -23,6 +23,14 @@ const svg = computed(() => {
   if (typeof props.icon === 'object') return props.icon.svg
   return ''
 })
+
+const iconSrc = computed(() => {
+  if (!props.icon || typeof props.icon !== 'string') return ''
+  // 外链图标不要走 withBase，避免被站点 base 污染
+  if (/^https?:\/\//.test(props.icon)) return props.icon
+  return withBase(props.icon)
+})
+
 // 处理article链接的 base 路径
 const resolvedLink = computed(() => {
   return withBase(props.link)
@@ -37,10 +45,12 @@ const resolvedLink = computed(() => {
     <article class="box">
       <div class="box-header">
         <div v-if="svg" class="icon" v-html="svg"></div>
-        <div v-else-if="icon && typeof icon === 'string'" class="icon">
+        <div v-else-if="iconSrc" class="icon">
           <img
-            :src="withBase(icon)"
+            :src="iconSrc"
             :alt="title"
+            loading="lazy"
+            referrerpolicy="no-referrer"
             onerror="this.parentElement.style.display='none'"
           />
         </div>

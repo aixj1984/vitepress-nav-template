@@ -159,7 +159,7 @@ export const NAV_DATA: NavData[] = [
         link: 'https://cn.redux.js.org',
       },
       {
-        icon: 'https://zh.mobx.js.org/assets/mobx.png',
+        icon: 'https://mobx.js.org/assets/mobx.png',
         title: 'MobX',
         desc: '一个小型、快速、可扩展的 React 状态管理解决方案',
         link: 'https://zh.mobx.js.org',
@@ -499,7 +499,7 @@ export const NAV_DATA: NavData[] = [
         link: 'https://developer.mozilla.org/zh-CN',
       },
       {
-        icon: 'https://static.runoob.com/images/favicon.ico',
+        icon: 'https://www.google.com/s2/favicons?domain=www.runoob.com&sz=64',
         title: '菜鸟教程',
         desc: '学的不仅是技术，更是梦想！',
         link: 'https://www.runoob.com',
@@ -537,7 +537,7 @@ export const NAV_DATA: NavData[] = [
       },
       {
         title: 'V2EX',
-        icon: 'https://www.v2ex.com/static/icon-192.png',
+        icon: 'https://www.google.com/s2/favicons?domain=www.v2ex.com&sz=64',
         desc: '一个关于分享和探索的地方',
         link: 'https://www.v2ex.com',
       },
@@ -566,7 +566,7 @@ export const NAV_DATA: NavData[] = [
     title: '摸鱼专用',
     items: [
       {
-        icon: 'https://momoyu.cc/icon-192.png',
+        icon: 'https://www.google.com/s2/favicons?domain=momoyu.cc&sz=64',
         title: '摸摸鱼热榜',
         // desc: '聚合每日热门、搞笑、有趣、适合摸鱼的资讯',
         link: 'https://momoyu.cc',

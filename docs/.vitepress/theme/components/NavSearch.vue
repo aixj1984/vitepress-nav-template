@@ -98,9 +98,9 @@ function closeSearch() {
 }
 
 function resolveIcon(icon: NavLink['icon']) {
-  if (!icon) return ''
-  if (typeof icon === 'string') return withBase(icon)
-  return ''
+  if (!icon || typeof icon !== 'string') return ''
+  if (/^https?:\/\//.test(icon)) return icon
+  return withBase(icon)
 }
 
 function isSvgIcon(icon: NavLink['icon']) {
@@ -250,6 +250,8 @@ defineExpose({ openSearch })
                 v-else-if="resolveIcon(item.icon)"
                 :src="resolveIcon(item.icon)"
                 :alt="item.title"
+                loading="lazy"
+                referrerpolicy="no-referrer"
                 onerror="this.style.display='none'"
               />
               <span v-else class="fallback">{{ item.title.slice(0, 1) }}</span>
